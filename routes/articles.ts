@@ -1,4 +1,5 @@
 import Router, { RouterContext } from "koa-router";
+import bodyParser from 'koa-bodyparser';
 
 const articles = [
   {
@@ -27,6 +28,11 @@ const getAll = async (ctx: RouterContext, next: any) => {
 }
 
 const createArticle = async (ctx: RouterContext, next: any) => {
+  let { title, fullText } = ctx.request.body;
+  let newArticle = { title: title, fullText: fullText };
+  articles.push(newArticle);
+  ctx.status = 201;
+  ctx.body = newArticle;
   await next();
 }
 
@@ -43,7 +49,7 @@ const deleteArticle = async (ctx: RouterContext, next: any) => {
 }
 
 router.get('/', getAll);
-router.post('/', createArticle);
+router.post('/', bodyParser(), createArticle);
 router.get('/:id', getById);
 router.put('/:id', updateArticle);
 router.delete('/:id', deleteArticle);
