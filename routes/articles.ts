@@ -43,6 +43,7 @@ const createArticle = async (ctx: RouterContext, next: any) => {
 const getById = async (ctx: RouterContext, next: any) => {
   let id = +ctx.params.id;
   if ((id < articles.length + 1) && (id > 0)) {
+    ctx.status = 200;
     ctx.body = articles[id - 1];
   } else {
     ctx.status = 404;
@@ -60,6 +61,7 @@ const updateArticle = async (ctx: RouterContext, next: any) => {
       ...articles[id - 1],
       ...updateArticle
     };
+    ctx.status = 200;
     ctx.body = updateArticle;
   } else {
     ctx.status = 404;
@@ -72,6 +74,7 @@ const deleteArticle = async (ctx: RouterContext, next: any) => {
 
   if (id < articles.length + 1 && id > 0) {
     articles.splice(id - 1, 1);
+    ctx.status = 200;
     ctx.body = { message: "deleted" };
   } else {
     ctx.status = 404;
