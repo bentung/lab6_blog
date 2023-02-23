@@ -32,19 +32,23 @@ var import_koa_bodyparser = __toESM(require("koa-bodyparser"));
 const articles = [
   {
     title: "Hello article",
-    fullText: "some text to fill the body"
+    fullText: "some text to fill the body",
+    creationDate: ""
   },
   {
     title: "Another article",
-    fullText: "again some text to fill the body"
+    fullText: "again some text to fill the body",
+    creationDate: ""
   },
   {
     title: "Coventry article",
-    fullText: "some coventry details to fill the body"
+    fullText: "some coventry details to fill the body",
+    creationDate: ""
   },
   {
     title: "smart campus",
-    fullText: "smart campus ..."
+    fullText: "smart campus ...",
+    creationDate: ""
   }
 ];
 const router = new import_koa_router.default({ prefix: "/api/v1/articles" });
@@ -54,7 +58,7 @@ const getAll = async (ctx, next) => {
 };
 const createArticle = async (ctx, next) => {
   let { title, fullText } = ctx.request.body;
-  let newArticle = { title, fullText };
+  let newArticle = { title, fullText, creationDate: new Date() };
   articles.push(newArticle);
   ctx.status = 201;
   ctx.body = newArticle;
@@ -72,9 +76,12 @@ const getById = async (ctx, next) => {
 const updateArticle = async (ctx, next) => {
   let id = +ctx.params.id;
   let { title, fullText } = ctx.request.body;
-  let updateArticle2 = { title: title ?? "", fullText: fullText ?? "" };
+  let updateArticle2 = { title: title ?? "", fullText: fullText ?? "", editedDate: new Date() };
   if (id < articles.length + 1 && id > 0) {
-    articles[id - 1] = updateArticle2;
+    articles[id - 1] = {
+      ...articles[id - 1],
+      ...updateArticle2
+    };
     ctx.body = updateArticle2;
   } else {
     ctx.status = 404;

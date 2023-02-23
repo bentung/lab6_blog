@@ -4,19 +4,23 @@ import bodyParser from 'koa-bodyparser';
 const articles = [
   {
     title: 'Hello article',
-    fullText: 'some text to fill the body'
+    fullText: 'some text to fill the body',
+    creationDate: ''
   },
   {
     title: 'Another article',
-    fullText: 'again some text to fill the body'
+    fullText: 'again some text to fill the body',
+    creationDate: ''
   },
   {
     title: 'Coventry article',
-    fullText: 'some coventry details to fill the body'
+    fullText: 'some coventry details to fill the body',
+    creationDate: ''
   },
   {
     title: 'smart campus',
-    fullText: 'smart campus ...'
+    fullText: 'smart campus ...',
+    creationDate: ''
   },
 ]
 
@@ -29,7 +33,7 @@ const getAll = async (ctx: RouterContext, next: any) => {
 
 const createArticle = async (ctx: RouterContext, next: any) => {
   let { title, fullText } = ctx.request.body;
-  let newArticle = { title: title, fullText: fullText };
+  let newArticle = { title: title, fullText: fullText, creationDate: new Date() };
   articles.push(newArticle);
   ctx.status = 201;
   ctx.body = newArticle;
@@ -49,10 +53,13 @@ const getById = async (ctx: RouterContext, next: any) => {
 const updateArticle = async (ctx: RouterContext, next: any) => {
   let id = +ctx.params.id;
   let { title, fullText } = ctx.request.body;
-  let updateArticle = { title: title ?? '', fullText: fullText ?? '' };
+  let updateArticle = { title: title ?? '', fullText: fullText ?? '', editedDate: new Date() };
 
   if (id < articles.length + 1 && id > 0) {
-    articles[id - 1] = updateArticle;
+    articles[id - 1] = {
+      ...articles[id - 1],
+      ...updateArticle
+    };
     ctx.body = updateArticle;
   } else {
     ctx.status = 404;
