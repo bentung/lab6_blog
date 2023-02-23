@@ -61,6 +61,12 @@ const createArticle = async (ctx, next) => {
   await next();
 };
 const getById = async (ctx, next) => {
+  let id = +ctx.params.id;
+  if (id < articles.length + 1 && id > 0) {
+    ctx.body = articles[id - 1];
+  } else {
+    ctx.status = 404;
+  }
   await next();
 };
 const updateArticle = async (ctx, next) => {
@@ -71,9 +77,9 @@ const deleteArticle = async (ctx, next) => {
 };
 router.get("/", getAll);
 router.post("/", (0, import_koa_bodyparser.default)(), createArticle);
-router.get("/:id", getById);
-router.put("/:id", updateArticle);
-router.delete("/:id", deleteArticle);
+router.get("/:id([0-9]{1,})", getById);
+router.put("/:id([0-9]{1,})", updateArticle);
+router.delete("/:id([0-9]{1,})", deleteArticle);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   router
