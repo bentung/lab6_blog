@@ -5,22 +5,22 @@ const articles = [
   {
     title: 'Hello article',
     fullText: 'some text to fill the body',
-    creationDate: ''
+    creationDate: new Date()
   },
   {
     title: 'Another article',
     fullText: 'again some text to fill the body',
-    creationDate: ''
+    creationDate: new Date()
   },
   {
     title: 'Coventry article',
     fullText: 'some coventry details to fill the body',
-    creationDate: ''
+    creationDate: new Date()
   },
   {
     title: 'smart campus',
     fullText: 'smart campus ...',
-    creationDate: ''
+    creationDate: new Date()
   },
 ]
 
@@ -83,7 +83,7 @@ const deleteArticle = async (ctx: RouterContext, next: any) => {
 router.get('/', getAll);
 router.post('/', bodyParser(), createArticle);
 router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', bodyParser(), updateArticle);
+router.put('/:id([0-9]{1,})', updateArticle);
 router.delete('/:id([0-9]{1,})', deleteArticle);
 
 export { router };

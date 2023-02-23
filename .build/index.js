@@ -20,10 +20,20 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var import_koa = __toESM(require("koa"));
 var import_koa_logger = __toESM(require("koa-logger"));
 var import_koa_json = __toESM(require("koa-json"));
+var import_koa_bodyparser = __toESM(require("koa-bodyparser"));
 var import_articles = require("./routes/articles");
 const app = new import_koa.default();
 app.use((0, import_koa_logger.default)());
 app.use((0, import_koa_json.default)());
+app.use((0, import_koa_bodyparser.default)());
 app.use(import_articles.router.routes());
+app.use(async (ctx, next) => {
+  try {
+    await next();
+    if (ctx.status === 404)
+      ctx.body = { err: "No such endpoint existed" };
+  } catch {
+  }
+});
 app.listen(10888);
 //# sourceMappingURL=index.js.map

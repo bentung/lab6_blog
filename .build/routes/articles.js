@@ -33,22 +33,22 @@ const articles = [
   {
     title: "Hello article",
     fullText: "some text to fill the body",
-    creationDate: ""
+    creationDate: new Date()
   },
   {
     title: "Another article",
     fullText: "again some text to fill the body",
-    creationDate: ""
+    creationDate: new Date()
   },
   {
     title: "Coventry article",
     fullText: "some coventry details to fill the body",
-    creationDate: ""
+    creationDate: new Date()
   },
   {
     title: "smart campus",
     fullText: "smart campus ...",
-    creationDate: ""
+    creationDate: new Date()
   }
 ];
 const router = new import_koa_router.default({ prefix: "/api/v1/articles" });
@@ -101,7 +101,7 @@ const deleteArticle = async (ctx, next) => {
 router.get("/", getAll);
 router.post("/", (0, import_koa_bodyparser.default)(), createArticle);
 router.get("/:id([0-9]{1,})", getById);
-router.put("/:id([0-9]{1,})", (0, import_koa_bodyparser.default)(), updateArticle);
+router.put("/:id([0-9]{1,})", updateArticle);
 router.delete("/:id([0-9]{1,})", deleteArticle);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
