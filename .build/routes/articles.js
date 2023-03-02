@@ -30,80 +30,58 @@ module.exports = __toCommonJS(articles_exports);
 var import_koa_router = __toESM(require("koa-router"));
 var import_koa_bodyparser = __toESM(require("koa-bodyparser"));
 var model = __toESM(require("../models/articles"));
-const articles = [
-  {
-    title: "Hello article",
-    fullText: "some text to fill the body",
-    creationDate: new Date()
-  },
-  {
-    title: "Another article",
-    fullText: "again some text to fill the body",
-    creationDate: new Date()
-  },
-  {
-    title: "Coventry article",
-    fullText: "some coventry details to fill the body",
-    creationDate: new Date()
-  },
-  {
-    title: "smart campus",
-    fullText: "smart campus ...",
-    creationDate: new Date()
-  }
-];
 const router = new import_koa_router.default({ prefix: "/api/v1/articles" });
 const getAll = async (ctx, next) => {
-  let articles2 = await model.getAll();
-  if (articles2.length) {
-    ctx.body = articles2;
+  let articles = await model.getAll();
+  if (articles.length) {
+    ctx.body = articles;
   } else {
     ctx.body = {};
   }
   await next();
 };
 const createArticle = async (ctx, next) => {
-  let { title, fullText } = ctx.request.body;
-  let newArticle = { title, fullText, creationDate: new Date() };
-  articles.push(newArticle);
-  ctx.status = 201;
-  ctx.body = newArticle;
+  const body = ctx.request.body;
+  let result = await model.add(body);
+  if (result.status == 201) {
+    ctx.status = 201;
+    ctx.body = body;
+  } else {
+    ctx.status = 500;
+    ctx.body = { err: "insert data failed" };
+  }
   await next();
 };
 const getById = async (ctx, next) => {
   let id = +ctx.params.id;
-  if (id < articles.length + 1 && id > 0) {
-    ctx.status = 200;
-    ctx.body = articles[id - 1];
+  let article = await model.getById(id);
+  if (article.length) {
+    ctx.body = article[0];
   } else {
-    ctx.status = 404;
+    ctx.status = 400;
   }
   await next();
 };
 const updateArticle = async (ctx, next) => {
   let id = +ctx.params.id;
-  let { title, fullText } = ctx.request.body;
-  let updateArticle2 = { title: title ?? "", fullText: fullText ?? "", editedDate: new Date() };
-  if (id < articles.length + 1 && id > 0) {
-    articles[id - 1] = {
-      ...articles[id - 1],
-      ...updateArticle2
-    };
-    ctx.status = 200;
-    ctx.body = updateArticle2;
+  const body = ctx.request.body;
+  let result = await model.update(body, id);
+  if (result.status == 201) {
+    ctx.status = 201;
+    ctx.body = body;
   } else {
-    ctx.status = 404;
+    ctx.status = 500;
+    ctx.body = { err: "update data failed" };
   }
   await next();
 };
 const deleteArticle = async (ctx, next) => {
   let id = +ctx.params.id;
-  if (id < articles.length + 1 && id > 0) {
-    articles.splice(id - 1, 1);
-    ctx.status = 200;
-    ctx.body = { message: "deleted" };
+  let result = await model.deleteArticle(id);
+  if (result) {
+    ctx.body = { msg: `${id} deleted` };
   } else {
-    ctx.status = 404;
+    ctx.status = 400;
   }
   await next();
 };

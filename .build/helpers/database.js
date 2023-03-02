@@ -18,7 +18,10 @@ var __copyProps = (to, from, except, desc) => {
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 var database_exports = {};
 __export(database_exports, {
-  run_query: () => run_query
+  run_delete: () => run_delete,
+  run_insert: () => run_insert,
+  run_query: () => run_query,
+  run_update: () => run_update
 });
 module.exports = __toCommonJS(database_exports);
 var import_sequelize = require("sequelize");
@@ -38,8 +41,56 @@ const run_query = async (query, values) => {
     throw "Database query error";
   }
 };
+const run_insert = async (sql, values) => {
+  try {
+    const sequelize = new import_sequelize.Sequelize(`postgres://${import_config.config.user}:${import_config.config.password}@${import_config.config.host}:${import_config.config.port}/${import_config.config.database}`);
+    await sequelize.authenticate();
+    let data = await sequelize.query(sql, {
+      replacements: values,
+      type: import_sequelize.QueryTypes.INSERT
+    });
+    await sequelize.close();
+    return data;
+  } catch (err) {
+    console.error(err, sql, values);
+    throw "Database query error";
+  }
+};
+const run_update = async (sql, values) => {
+  try {
+    const sequelize = new import_sequelize.Sequelize(`postgres://${import_config.config.user}:${import_config.config.password}@${import_config.config.host}:${import_config.config.port}/${import_config.config.database}`);
+    await sequelize.authenticate();
+    let data = await sequelize.query(sql, {
+      replacements: values,
+      type: import_sequelize.QueryTypes.UPDATE
+    });
+    await sequelize.close();
+    return data;
+  } catch (err) {
+    console.error(err, sql, values);
+    throw "Database query error";
+  }
+};
+const run_delete = async (sql, values) => {
+  try {
+    const sequelize = new import_sequelize.Sequelize(`postgres://${import_config.config.user}:${import_config.config.password}@${import_config.config.host}:${import_config.config.port}/${import_config.config.database}`);
+    await sequelize.authenticate();
+    let data = await sequelize.query(sql, {
+      replacements: values,
+      type: import_sequelize.QueryTypes.DELETE
+    });
+    await sequelize.close();
+    return data;
+  } catch (err) {
+    console.error(err, sql, values);
+    throw "Database query error";
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
-  run_query
+  run_delete,
+  run_insert,
+  run_query,
+  run_update
 });
 //# sourceMappingURL=database.js.map
