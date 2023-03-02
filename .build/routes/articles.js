@@ -78,11 +78,8 @@ const updateArticle = async (ctx, next) => {
 const deleteArticle = async (ctx, next) => {
   let id = +ctx.params.id;
   let result = await model.deleteArticle(id);
-  if (result) {
-    ctx.body = { msg: `${id} deleted` };
-  } else {
-    ctx.status = 400;
-  }
+  ctx.status = 201;
+  ctx.body = { msg: `${id} deleted` };
   await next();
 };
 router.get("/", getAll);

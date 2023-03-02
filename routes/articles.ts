@@ -115,11 +115,8 @@ const deleteArticle = async (ctx: RouterContext, next: any) => {
   //   ctx.status = 404;
   // }
   let result = await model.deleteArticle(id);
-  if (result) {
-    ctx.body = { msg: `${id} deleted` };
-  } else {
-    ctx.status = 400;
-  }
+  ctx.status = 201;
+  ctx.body = { msg: `${id} deleted` };
 
 
   await next();
