@@ -1,5 +1,6 @@
 import Router, { RouterContext } from "koa-router";
 import bodyParser from 'koa-bodyparser';
+import * as model from "../models/articles";
 
 const articles = [
   {
@@ -27,7 +28,13 @@ const articles = [
 const router = new Router({ prefix: '/api/v1/articles' });
 
 const getAll = async (ctx: RouterContext, next: any) => {
-  ctx.body = articles;
+  // ctx.body = articles;
+  let articles = await model.getAll();
+  if (articles.length) {
+    ctx.body = articles;
+  } else {
+    ctx.body = {};
+  }
   await next();
 }
 

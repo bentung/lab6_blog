@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../models/articles.ts"],
+  "sourcesContent": ["import * as db from '../helpers/database';\n\nexport const getById = async (id: any) => {}\n\nexport const getAll = async() => {\n  let query = 'SELECT * FROM articles';\n  let data = await db.run_query(query, null);\n  return data;\n}"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA,SAAoB;AAEb,MAAM,UAAU,OAAO,OAAY;AAAC;AAEpC,MAAM,SAAS,YAAW;AAC/B,MAAI,QAAQ;AACZ,MAAI,OAAO,MAAM,GAAG,UAAU,OAAO,IAAI;AACzC,SAAO;AACT;",
+  "names": []
+}

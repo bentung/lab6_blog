@@ -29,6 +29,7 @@ __export(articles_exports, {
 module.exports = __toCommonJS(articles_exports);
 var import_koa_router = __toESM(require("koa-router"));
 var import_koa_bodyparser = __toESM(require("koa-bodyparser"));
+var model = __toESM(require("../models/articles"));
 const articles = [
   {
     title: "Hello article",
@@ -53,7 +54,12 @@ const articles = [
 ];
 const router = new import_koa_router.default({ prefix: "/api/v1/articles" });
 const getAll = async (ctx, next) => {
-  ctx.body = articles;
+  let articles2 = await model.getAll();
+  if (articles2.length) {
+    ctx.body = articles2;
+  } else {
+    ctx.body = {};
+  }
   await next();
 };
 const createArticle = async (ctx, next) => {
@@ -67,6 +73,7 @@ const createArticle = async (ctx, next) => {
 const getById = async (ctx, next) => {
   let id = +ctx.params.id;
   if (id < articles.length + 1 && id > 0) {
+    ctx.status = 200;
     ctx.body = articles[id - 1];
   } else {
     ctx.status = 404;
@@ -82,6 +89,7 @@ const updateArticle = async (ctx, next) => {
       ...articles[id - 1],
       ...updateArticle2
     };
+    ctx.status = 200;
     ctx.body = updateArticle2;
   } else {
     ctx.status = 404;
@@ -92,6 +100,7 @@ const deleteArticle = async (ctx, next) => {
   let id = +ctx.params.id;
   if (id < articles.length + 1 && id > 0) {
     articles.splice(id - 1, 1);
+    ctx.status = 200;
     ctx.body = { message: "deleted" };
   } else {
     ctx.status = 404;
