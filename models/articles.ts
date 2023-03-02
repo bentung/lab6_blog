@@ -55,6 +55,5 @@ export const deleteArticle = async (id: any) => {
   let query = 'DELETE FROM articles WHERE ID = ?';
   let values = [id];
   let data = await db.run_delete(query, values);
-  console.log(data);
   return data;
 }
