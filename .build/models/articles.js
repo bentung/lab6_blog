@@ -81,7 +81,6 @@ const deleteArticle = async (id) => {
   let query = "DELETE FROM articles WHERE ID = ?";
   let values = [id];
   let data = await db.run_delete(query, values);
-  console.log(data);
   return data;
 };
 // Annotate the CommonJS export names for ESM import in node:

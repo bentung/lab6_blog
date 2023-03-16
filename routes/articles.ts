@@ -1,6 +1,8 @@
 import Router, { RouterContext } from "koa-router";
 import bodyParser from 'koa-bodyparser';
 import * as model from "../models/articles";
+import { basicAuth } from "../controllers/auth";
+import { validateArticle } from "../controllers/validation";
 
 // const articles = [
 //   {
@@ -29,6 +31,8 @@ const router = new Router({ prefix: '/api/v1/articles' });
 
 const getAll = async (ctx: RouterContext, next: any) => {
   // ctx.body = articles;
+  console.log(ctx);
+  console.log(next);
   let articles = await model.getAll();
   if (articles.length) {
     ctx.body = articles;
@@ -118,14 +122,13 @@ const deleteArticle = async (ctx: RouterContext, next: any) => {
   ctx.status = 201;
   ctx.body = { msg: `${id} deleted` };
 
-
   await next();
 }
 
 router.get('/', getAll);
-router.post('/', bodyParser(), createArticle);
+router.post('/', basicAuth, bodyParser(), validateArticle, createArticle);
 router.get('/:id([0-9]{1,})', getById);
-router.put('/:id([0-9]{1,})', updateArticle);
-router.delete('/:id([0-9]{1,})', deleteArticle);
+router.put('/:id([0-9]{1,})', basicAuth, bodyParser(), updateArticle);
+router.delete('/:id([0-9]{1,})', basicAuth, deleteArticle);
 
 export { router };
